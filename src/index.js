@@ -4,8 +4,7 @@ import app from "./app.js"
 //db Connection
 import connectDB from "./db/db-connect.js"
 
-//AdminJS setup
-import { buildAdminRouter, admin } from "./admin/admin.js";
+
 
 dotenv.config({
     path: "./.env",
@@ -28,8 +27,7 @@ const port = process.env.PORT || 3000;
 
 async function start() {
     await connectDB(process.env.MONGO_URI);
-    const adminRouter = buildAdminRouter();
-    app.use(admin.options.rootPath, adminRouter);
+    
     app.listen(port, () => {
         console.log(`✅ Server running on http://localhost:${port}`);
         console.log("AdminJS:", `http://localhost:${port}/admin`);
