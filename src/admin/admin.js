@@ -10,31 +10,39 @@ import Teacher from "../models/teacher.model.js";
 AdminJS.registerAdapter(AdminJSMongoose);
 
 const admin = new AdminJS({
-    resources: [User, Student, Teacher],
+    resources: [
+        {
+            resource: User,
+            options: {
+                properties: {
+                    password: { isVisible: { list: false, edit: true, show: false } }
+                }
+            }
+        },
+        {
+            resource: Student,
+        },
+        {
+            resource: Teacher,
+        }
+    ],
     rootPath: "/admin",
 });
 
 const buildAdminRouter = () =>
-    AdminJSExpress.buildAuthenticatedRouter(
+     AdminJSExpress.buildAuthenticatedRouter(
         admin,
         {
             authenticate: async (email, password) => {
-                const user = await User.findOne({ email });
+                const user = await User.findOne({ email,role: "admin" });
 
-                if (user && user.role === "admin") {
+                if (user && await user.comparePassword(password)) {
                     return user;
                 }
                 return null;
             },
-            cookieName: "adminjs",
-            cookiePassword: "supersecret",
-        },
-        null,
-        {
-            resave: false,
-            saveUninitialized: true,
-            secret: "supersecret",
-        }
-    );
+           
+            cookiePassword: process.env.JWT_SECRET || "default-secret-key",
+        });
 
 export { admin, buildAdminRouter };

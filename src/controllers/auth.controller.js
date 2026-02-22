@@ -7,13 +7,13 @@ export const loginStudent = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     // For debugging: Log the email received in the request
-    console.log("Email from request:", email);
-    console.log("Password from request:", password);
+    // console.log("Email from request:", email);
+    // console.log("Password from request:", password);
 
     const user = await User.findOne({ email });
 
     // For debugging: Log the user found in the database
-    console.log("User found in DB:", user);
+    // console.log("User found in DB:", user);
 
     if (!user || user.role !== "student") {
         return res
@@ -23,7 +23,7 @@ export const loginStudent = asyncHandler(async (req, res) => {
 
     const isMatch = await user.comparePassword(password);
     // For debugging: Log the result of password comparison
-    console.log("Password match result:", isMatch);
+    // console.log("Password match result:", isMatch);
 
     if (!isMatch) {
         return res

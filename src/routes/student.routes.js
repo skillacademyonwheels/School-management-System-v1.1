@@ -2,6 +2,9 @@ import express from "express";
 import { loginStudent } from "../controllers/auth.controller.js";
 import { getStudentDashboard } from "../controllers/student.controller.js";
 import { verifyStudent } from "../middlewares/auth.middleware.js";
+import { registerStudent } from "../controllers/student.controller.js";
+
+
 
 const router = express.Router();
 
@@ -10,6 +13,11 @@ router.post("/login", loginStudent);
 
 // Protected dashboard
 router.get("/dashboard", verifyStudent, getStudentDashboard);
+
+//Add Register route here
+router.post("/register", registerStudent);
+
+
 
 router.post("/logout", (req, res) => {
     res.clearCookie("studentToken");
